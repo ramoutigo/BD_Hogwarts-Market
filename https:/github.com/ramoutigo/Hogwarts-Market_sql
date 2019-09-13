@@ -1,17 +1,18 @@
-create database padaria
+create database HogwartsMarket
 default character set utf8
 default collate utf8_general_ci;
 
-use padaria;
+use HogwartsMarket;
 
 create table cliente(
+id_cl int primary key auto_increment,
 cidade_cl varchar (20),
 sexo_cl enum (‘M’,‘F’),
 cpf_cl varchar(14) not null,
 nome_cl varchar(60) not null,
 email_cl varchar(60) not null,
 telefone_cl int not null,
-primary key(cpf_cl)
+primary key(id_cl)
 )default charset = utf8;
 
 create table fornecedor(
@@ -22,7 +23,7 @@ primary key(cnpj_forn)
 )default charset = utf8;
 
 create table produto(
-cod_prod  SMALLINT not null AUTO_INCREMENT,
+cod_prod  INT not null AUTO_INCREMENT,
 tipo_prod varchar(30) not null,
 nome_prod varchar(60) not null,
 valor_prod float not null,
@@ -31,7 +32,6 @@ primary key(cod_prod)
 
 create table funcionario(
 cpf_fc varchar(14) not null,
-cpf_g varchar(14),
 nome_fc varchar(60) not null,
 carteiratrab_fc varchar(15) not null,
 cargo_fc ENUM ('G','P','C') not null,
@@ -41,7 +41,7 @@ FOREIGN KEY(cpf_g) REFERENCES funcionario(cpf_fc)
 )default charset = utf8;
 
 create table compra_venda(
-cod_cv SMALLINT not null,
+cod_cv smallint not null AUTO_INCREMENT,
 data_cv datetime not null,
 quantidade_cv varchar(30) not null,
 cpf_cl varchar(14) not null,
@@ -55,8 +55,6 @@ FOREIGN KEY (cod_prod) REFERENCES produto(cod_prod)
 
 alter table compra_venda add index(cod_cv);
 
-alter table compra_venda change cod_cv cod_cv smallint NOT NULL AUTO_INCREMENT;
-
 create table produziu(
 mes_prd date not null,
 quantidade_prd SMALLINT not null,
@@ -65,13 +63,11 @@ cod_prod SMALLINT not null,
 primary key(cpf_fc,cod_prod),
 FOREIGN KEY (cpf_fc) REFERENCES funcionario(cpf_fc),
 FOREIGN KEY (cod_prod) REFERENCES produto(cod_prod)
-
 )default charset = utf8;
 
 create table fornece(
 cnpj_forn varchar(18) not null,
 cod_prod SMALLINT not null,
-
 primary key(cnpj_forn,cod_prod),
 foreign key(cnpj_forn) references fornecedor (cnpj_forn),
 foreign key(cod_prod) references produto (cod_prod)
